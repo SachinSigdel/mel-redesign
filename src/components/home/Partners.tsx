@@ -19,7 +19,7 @@ function Logo({ logo, copy }: { logo: (typeof PARTNERS)[number]; copy?: boolean 
 
 /* An endless, slow scroll of partner logos (the motion is in globals.css, "Partner logos") */
 export default function Partners() {
-  // the last section before the footer, on plain white; the tiles get a hairline so they still read as cards
+  // right after About, on the same plain white; the tiles get a hairline so they still read as cards
   return (
     <section className="pt-4 pb-20" aria-labelledby="partners-title">
       <div className="wrap">

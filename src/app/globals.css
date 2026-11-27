@@ -225,17 +225,40 @@ html.lenis, html.lenis body { height: auto; }
 }
 /* a11y: keyboard focus inside a block that hasn't been revealed yet shows it at once */
 .js-reveal [data-reveal]:focus-within { opacity: 1; transform: none; transition-duration: 0ms; transition-delay: 0ms; }
-@media print { .js-reveal [data-reveal], .js-reveal [data-heading] { opacity: 1 !important; transform: none !important; clip-path: none !important; } }
+@media print { .js-reveal [data-reveal], .js-reveal [data-heading] { opacity: 1 !important; transform: none !important; -webkit-mask: none !important; mask: none !important; animation: none !important; } }
 
 /* ---------- Heading transitions ----------
-   Section headings slide up out of a mask as they scroll into view (each time, like the reveals).
-   The clip ends slightly larger than the line box, so descenders (g, y, p) aren't cut. */
+   Headings fade in sideways each time they scroll into view: a soft-edged mask sweeps across the
+   text while it slides 24px. They alternate down the page: the first from the left, the next from
+   the right, and so on (the script marks every other one data-heading-from="right").
+   The sweep runs as an animation, and the mask is removed once it ends, so no letter is ever clipped. */
 .js-reveal [data-heading] {
-  clip-path: inset(0 0 100% 0);
-  transform: translateY(0.5em);
-  transition: clip-path 700ms var(--ease-brand), transform 700ms var(--ease-brand);
+  --wipe: linear-gradient(90deg, #000 40%, transparent 60%); /* visible on the left, fading out to the right */
+  -webkit-mask: var(--wipe) 100% 0 / 250% 100% no-repeat;
+  mask: var(--wipe) 100% 0 / 250% 100% no-repeat;
+  transform: translateX(-24px);
 }
-.js-reveal [data-heading].is-revealed { clip-path: inset(-0.2em -0.1em -0.3em -0.1em); transform: none; }
+.js-reveal [data-heading][data-heading-from="right"] {
+  --wipe: linear-gradient(270deg, #000 40%, transparent 60%);
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+  transform: translateX(24px);
+}
+.js-reveal [data-heading].is-revealed {
+  -webkit-mask: none;
+  mask: none;
+  transform: none;
+  animation: heading-in-left 900ms var(--ease-brand) backwards; /* backwards: once it ends, the mask is gone */
+}
+.js-reveal [data-heading][data-heading-from="right"].is-revealed { animation-name: heading-in-right; }
+@keyframes heading-in-left {
+  from { -webkit-mask: var(--wipe) 100% 0 / 250% 100% no-repeat; mask: var(--wipe) 100% 0 / 250% 100% no-repeat; transform: translateX(-24px); }
+  to { -webkit-mask: var(--wipe) 0 0 / 250% 100% no-repeat; mask: var(--wipe) 0 0 / 250% 100% no-repeat; transform: none; }
+}
+@keyframes heading-in-right {
+  from { -webkit-mask: var(--wipe) 0 0 / 250% 100% no-repeat; mask: var(--wipe) 0 0 / 250% 100% no-repeat; transform: translateX(24px); }
+  to { -webkit-mask: var(--wipe) 100% 0 / 250% 100% no-repeat; mask: var(--wipe) 100% 0 / 250% 100% no-repeat; transform: none; }
+}
 
 /* ---------- Hero photo ----------
    The team photo fills the hero (the right part on desktop) and fades into white behind the text,

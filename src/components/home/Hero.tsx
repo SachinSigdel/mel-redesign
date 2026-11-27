@@ -23,7 +23,7 @@ export default function Hero() {
       <div className="wrap relative grid w-full items-end gap-10 md:grid-cols-[1.3fr_1fr] md:gap-14">
         <div className="animate-rise">
           <Eyebrow>Recruitment made simple</Eyebrow>
-          <h1 className="mb-5 text-hero leading-[1.08] tracking-[-0.02em]">
+          <h1 className="mb-5 text-hero leading-[1.08] tracking-[-0.02em]" data-heading>
             Find a job that fits your career goals
           </h1>
           <p className="mb-8 max-w-xl text-18 leading-[1.6]">

@@ -5,22 +5,31 @@ import { usePathname } from "next/navigation";
 
 /* Fades and raises every [data-reveal] element 16px each time it scrolls into view, and resets it
    once it has left the screen completely, so the animation plays again next time.
-   Siblings are staggered 80ms (max 240ms). The motion itself is CSS (globals.css, "Scroll reveal");
-   this only adds the classes. Runs again after each client-side navigation, for the new page. */
+   Siblings are staggered 80ms (max 240ms). Headings ([data-heading]) fade in sideways instead,
+   alternating from the left and from the right. The motion itself is CSS (globals.css, "Scroll reveal"
+   and "Heading transitions"); this only adds the classes. Runs again after each client-side navigation. */
 export default function ScrollReveal() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal], [data-heading]")); // headings slide up out of a mask
+    const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal], [data-heading]"));
     if (!els.length || !("IntersectionObserver" in window)) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // no motion: show everything as is
+
+    // headings alternate: the 1st, 3rd, 5th… come in from the left, the others from the right
+    document.querySelectorAll("[data-heading]").forEach((h, i) => {
+      if (i % 2) h.setAttribute("data-heading-from", "right");
+    });
 
     els.forEach((el) => {
       const siblings = Array.from(el.parentElement?.children ?? []).filter((c) => c.hasAttribute("data-reveal"));
       const i = siblings.indexOf(el);
       if (i > 0) el.style.setProperty("--reveal-delay", `${Math.min(i, 3) * 80}ms`);
-      // anything already on screen stays as it is (no flash of hidden content)
-      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add("is-revealed");
+      // blocks already on screen stay as they are (no flash of hidden content); headings on screen
+      // still play their sweep, because the observer below reveals them a frame later
+      if (!el.hasAttribute("data-heading") && el.getBoundingClientRect().top < window.innerHeight) {
+        el.classList.add("is-revealed");
+      }
     });
     // content is only hidden once this class is on <html>, so without JS everything is visible
     document.documentElement.classList.add("js-reveal");

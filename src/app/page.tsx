@@ -13,11 +13,11 @@ export default function HomePage() {
       <Hero />
       <Steps />
       <About />
+      <Partners />
       <Services />
       <CtaPanel />
       <Testimonials />
       <BlogSection />
-      <Partners />
     </>
   );
 }

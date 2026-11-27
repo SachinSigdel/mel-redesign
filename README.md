@@ -84,8 +84,8 @@ tests/                        Playwright tests
   - Three cards in a row, instead of one post per full-width row.
   - The post without an image gets a branded navy fallback.
   - Useful tags (Healthcare, Security, For employers) replace "Uncategorized".
-- **Partner logos:** an endless, slow scroll of partner companies above the footer. It pauses when you hover it.
-- **Footer:** four labelled columns and a bottom bar, instead of a lone "All policies" column.
+- **Partner logos:** an endless, slow scroll of partner companies, right after the About section. It pauses when you hover it.
+- **Footer:** a logo column and three labelled columns (Company, Candidates, Get in touch) with a bottom bar, instead of a lone "All policies" column.
 
 **Contact page:**
 - **Top, on navy:** the heading on the left, and the four ways to reach MEL (visit, call, email, office hours) as translucent cards with white icon tiles. Phone and email can be tapped.
@@ -101,7 +101,7 @@ tests/                        Playwright tests
 - **Fewer fonts and icon sets:** one icon set (Lucide) instead of three, and two font families instead of three.
 - **Calmer motion:**
   - The original's 1.35s scroll lag is gone. Lenis smooths only wheel and trackpad scrolling.
-  - Sections fade up 16px as they come into view, and headings slide up out of a mask.
+  - Sections fade up 16px as they come into view. Headings fade in sideways through a soft-edged sweep, alternating from the left and from the right; the hero heading plays it on page load.
   - Everything turns off when "reduce motion" is on.
 
 ## Technical decisions
