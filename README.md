@@ -2,7 +2,8 @@
 
 A redesign and rebuild of the home page and contact page of [mymel.co.uk](https://mymel.co.uk), a UK recruitment agency working across five sectors: facilities, healthcare, logistics, hospitality and security. The original is a WordPress and Elementor site. This version keeps MEL's brand (logo, navy and blue palette, Poppins and Heebo) and improves the layout, navigation, readability, accessibility and speed.
 
-- **Live site:** _not deployed yet_
+- **Live site:** https://mel-redesign.vercel.app
+- **Repository:** https://github.com/SachinSigdel/mel-redesign
 - **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · zod + react-hook-form · Nodemailer · Lenis · Playwright
 - **Scope:** home page (`/`) and contact page (`/contact`). Other menu links point to the live MEL site.
 
