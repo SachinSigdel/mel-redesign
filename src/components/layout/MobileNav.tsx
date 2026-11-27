@@ -9,7 +9,7 @@ import { buttonClasses } from "@/components/ui/Button";
 import { iconButton } from "./navStyles";
 
 // Everything behind the drawer. The drawer itself is a separate child of <body>, so it isn't included.
-const BACKGROUND = "body > header, body > main, body > footer";
+const BACKGROUND = "body > header, body > main, body > footer, body > [data-mobile-cta]";
 
 const DRAWER_LINK =
   "block py-3 font-head font-medium text-heading aria-[current=page]:text-navy aria-[current=page]:underline aria-[current=page]:decoration-blue aria-[current=page]:decoration-2 aria-[current=page]:underline-offset-6";
@@ -80,7 +80,7 @@ export default function MobileNav({ open, onClose, pathname, returnFocusRef }: M
         }`}
       >
         <button className={`${iconButton} mb-4 self-end`} type="button" aria-label="Close menu" onClick={onClose}>
-          <X className="size-4.5" aria-hidden="true" />
+          <X className="size-7.5" aria-hidden="true" />
         </button>
         <ul>
           {NAV_LINKS.map((link) => {

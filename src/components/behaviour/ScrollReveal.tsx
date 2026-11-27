@@ -11,7 +11,7 @@ export default function ScrollReveal() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal], [data-heading]")); // headings slide up out of a mask
     if (!els.length || !("IntersectionObserver" in window)) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // no motion: show everything as is
 

@@ -58,9 +58,11 @@
   --text-17: 17px;
   --text-18: 18px;
   --text-20: 20px;
+  --text-22: 22px;
   --text-24: 24px;
+  --text-26: 26px;
   /* Fluid headings: grow with the screen between a minimum and a maximum */
-  --text-hero: clamp(36px, 5.4vw, 56px);
+  --text-hero: clamp(36px, 5.4vw, 60px);
   --text-page: clamp(34px, 5vw, 52px);
   --text-cta: clamp(30px, 4.4vw, 46px);
   --text-section: clamp(28px, 4vw, 42px);
@@ -155,7 +157,7 @@
 .cta-bg {
   background:
     linear-gradient(rgb(1 106 163 / 0.5), rgb(1 106 163 / 0.5)),
-    url("/images/cta-bg.webp") left center / cover no-repeat,
+    url("/images/cta-bg-right.webp") right center / cover no-repeat, /* the swirls sit on the right */
     var(--color-blue-700);
 }
 
@@ -196,6 +198,12 @@ html.lenis, html.lenis body { height: auto; }
 .btn-sweep:focus-visible { color: var(--color-navy); } /* keyboard focus gets the same fill */
 .btn-sweep:focus-visible::after { height: 400%; opacity: 1; }
 
+/* ---------- Mobile action bar (MobileCta.tsx) ----------
+   Space under the page on small screens, so the fixed bar never covers the footer */
+@media (max-width: 899px) {
+  body { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+}
+
 /* ---------- Scroll reveal ----------
    16px rise over 500ms each time a block scrolls into view, siblings 80ms apart (set by ScrollReveal.tsx).
    Only active when JS has added .js-reveal to <html>, so without JS nothing is ever hidden. */
@@ -217,14 +225,54 @@ html.lenis, html.lenis body { height: auto; }
 }
 /* a11y: keyboard focus inside a block that hasn't been revealed yet shows it at once */
 .js-reveal [data-reveal]:focus-within { opacity: 1; transform: none; transition-duration: 0ms; transition-delay: 0ms; }
-@media print { .js-reveal [data-reveal] { opacity: 1 !important; transform: none !important; } }
+@media print { .js-reveal [data-reveal], .js-reveal [data-heading] { opacity: 1 !important; transform: none !important; clip-path: none !important; } }
+
+/* ---------- Heading transitions ----------
+   Section headings slide up out of a mask as they scroll into view (each time, like the reveals).
+   The clip ends slightly larger than the line box, so descenders (g, y, p) aren't cut. */
+.js-reveal [data-heading] {
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(0.5em);
+  transition: clip-path 700ms var(--ease-brand), transform 700ms var(--ease-brand);
+}
+.js-reveal [data-heading].is-revealed { clip-path: inset(-0.2em -0.1em -0.3em -0.1em); transform: none; }
+
+/* ---------- Hero photo ----------
+   The team photo fills the hero (the right part on desktop) and fades into white behind the text,
+   so the hero stays light. At the bottom it fades into a band in its own colours (white to a soft
+   teal), which separates the hero from the blue steps strip. */
+.hero-photo { background: linear-gradient(90deg, #fff 30%, #d3ecf1 100%); }
+.hero-photo__bg { mask-image: linear-gradient(180deg, #000 75%, transparent); } /* the photo fades into the band */
+.hero-photo__bg::after { /* phones: a strong white veil so the text reads over the photo */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(255 255 255 / 0.88);
+}
+@media (min-width: 900px) {
+  .hero-photo::before { /* solid white under the text half, which the photo fades into */
+    content: "";
+    position: absolute;
+    inset: 0 65% 0 0;
+    background: var(--color-white);
+  }
+  .hero-photo__bg::after { background: linear-gradient(90deg, #fff 0%, rgb(255 255 255 / 0.8) 30%, rgb(255 255 255 / 0) 75%); }
+}
+
+/* ---------- Partner logos: an endless, slow scroll ----------
+   The track holds the list twice; moving it left by exactly half makes the loop seamless.
+   It pauses while hovered, and with "reduce motion" the logos sit still in a row. */
+.marquee { mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.marquee-track { animation: marquee 32s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
 
 /* ---------- Steps: wavy dotted paths with dots flowing from step to step ----------
    Layout and look are utilities in Steps.tsx; the timing lives here because it
    depends on the reveal classes and on each step's position.
    Sequence: circle 1 pulses, path 1 draws in, circle 2 pulses, path 2 draws in,
-   circle 3 pulses. The dots flow for 4.5s, then stop (WCAG 2.2.2), and flow again
-   while the strip is hovered. */
+   circle 3 pulses. The dots keep flowing towards the next step while the strip is on
+   screen, and reset when it scrolls away. "Reduce motion" turns them off. */
 .step-path {
   fill: none;
   stroke: rgb(255 255 255 / 0.85);
@@ -238,11 +286,7 @@ html.lenis, html.lenis body { height: auto; }
   animation: step-draw 700ms var(--ease-soft) calc(400ms + var(--i) * 800ms) both;
 }
 .js-reveal .is-revealed .step-path {
-  animation: step-flow 300ms linear calc(400ms + var(--i) * 800ms) 15; /* 15 × 300ms = 4.5s */
-}
-@media (hover: hover) {
-  /* only the repeat count changes, so the dots carry on instead of restarting */
-  .js-reveal .steps-list:hover .is-revealed .step-path { animation-iteration-count: infinite; }
+  animation: step-flow 300ms linear calc(400ms + var(--i) * 800ms) infinite; /* loops while on screen */
 }
 .js-reveal .is-revealed .step-pulse::after {
   animation: step-pulse 900ms var(--ease-soft) var(--pulse-delay, 300ms) both;
@@ -270,4 +314,7 @@ html.lenis, html.lenis body { height: auto; }
     animation-iteration-count: 1 !important;
   }
   .step-connector, .step-path, .step-pulse::after { animation: none !important; }
+  .marquee-track { animation: none !important; flex-wrap: wrap; justify-content: center; width: auto; } /* logos sit still */
+  .marquee-copy, .marquee-dup { display: none; } /* only one copy of each logo */
+  .marquee { mask-image: none; }
 }

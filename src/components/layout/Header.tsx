@@ -46,7 +46,7 @@ export default function Header() {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 bg-white/96 backdrop-blur-sm backdrop-saturate-180 transition-shadow duration-160 ease-brand ${
+        className={`sticky top-0 z-50 bg-white transition-shadow duration-160 ease-brand ${
           scrolled ? "shadow-header" : ""
         }`}
       >
@@ -85,7 +85,7 @@ export default function Header() {
             aria-controls="mobile-nav"
             onClick={() => setMenuOpen(true)}
           >
-            <Menu className="size-4.5" aria-hidden="true" />
+            <Menu className="size-7.5" aria-hidden="true" />
           </button>
         </div>
       </header>

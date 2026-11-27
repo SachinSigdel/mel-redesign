@@ -132,7 +132,7 @@ export default function ContactForm() {
         full
         error={errors.message?.message}
         hint={
-          <div className="flex justify-between text-13 text-muted" id="message-hint">
+          <div className="flex justify-between text-13 text-ink" id="message-hint">
             <span>At least 10 characters</span>
             <span>{messageLength}/1000</span>
           </div>
@@ -150,7 +150,7 @@ export default function ContactForm() {
 
       <div className="col-span-full">
         {/* aria-disabled, not disabled: a disabled button loses keyboard focus, which jumps to the top of the page */}
-        <button type="submit" className={`${buttonClasses("primary")} w-full sm:w-auto`} aria-disabled={isSubmitting || undefined}>
+        <button type="submit" className={`${buttonClasses("primary")} w-full`} aria-disabled={isSubmitting || undefined}>
           {isSubmitting ? (
             <>
               <span className="size-4 animate-[spin_0.7s_linear_infinite] rounded-full border-2 border-white/40 border-t-white motion-reduce:animate-none" aria-hidden="true" /> Sending…

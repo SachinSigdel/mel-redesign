@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Heebo, Poppins } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import MobileCta from "@/components/layout/MobileCta";
 import SmoothScroll from "@/components/behaviour/SmoothScroll";
 import ScrollReveal from "@/components/behaviour/ScrollReveal";
 import "./globals.css";
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main id="main">{children}</main>
         <Footer />
+        <MobileCta />
         <SmoothScroll />
         <ScrollReveal />
       </body>

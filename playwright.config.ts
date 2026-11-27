@@ -20,5 +20,6 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
+    env: { CONTACT_DRY_RUN: "1" }, // the tests never send real emails
   },
 });

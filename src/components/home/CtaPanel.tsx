@@ -17,7 +17,7 @@ export default function CtaPanel() {
         <div className="wrap grid items-center gap-10 md:grid-cols-[1.1fr_0.9fr] md:gap-16">
           <div data-reveal>
             <Eyebrow tone="white">Continue your job hunt on the go</Eyebrow>
-            <h2 id="cta-title" className="mb-4 text-cta text-white">Your next role is one click away</h2>
+            <h2 id="cta-title" className="mb-4 text-cta text-white" data-heading>Your next role is one click away</h2>
             <p className="mb-8 max-w-130 text-17">
               Looking for a job that fits you has never been this easy. Reach out to endless opportunities and get
               involved in revolutionising the world. We provide you with the best working experience.

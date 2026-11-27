@@ -13,21 +13,21 @@ const HIGHLIGHTS = [
 export default function About() {
   return (
     <section className="py-16 md:py-24">
-      <div className="wrap grid items-center gap-10 md:grid-cols-[1.15fr_1fr] md:gap-18">
-        <div data-reveal>
+      <div className="wrap grid items-center gap-10 md:grid-cols-2 md:gap-18">
+        {/* the illustration, half the width; multiply blends its white background into the page */}
+        <div className="mix-blend-multiply" data-reveal>
           <Image
-            src="/images/welcome.jpg"
-            alt="A team meeting around a table, connected by a network of lines"
-            width={760}
-            height={801}
-            sizes="(min-width: 900px) 55vw, 100vw"
-            // cropped to 4:3 on phones and tablets, the full image on desktop
-            className="aspect-4/3 w-full rounded-panel object-cover object-[center_70%] md:aspect-760/801 md:object-center"
+            src="/images/hero.jpg"
+            alt="A recruiter talking with a candidate at a desk"
+            width={980}
+            height={980}
+            sizes="(min-width: 900px) 50vw, 100vw"
+            className="mx-auto w-full max-w-110 md:max-w-none"
           />
         </div>
         <div>
           <Eyebrow>Welcome to MEL</Eyebrow>
-          <h2 className="mb-4 text-about">We believe in the power of human connection</h2>
+          <h2 className="mb-4 text-about" data-heading>We believe in the power of human connection</h2>
           <p className="mb-7 text-17">
             It&apos;s not just about handshakes and small talk. It&apos;s about making sure you feel heard, understood
             and supported by a team that truly cares, at work and beyond.

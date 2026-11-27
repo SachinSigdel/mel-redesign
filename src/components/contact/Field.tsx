@@ -3,7 +3,7 @@ import { CircleAlert } from "lucide-react";
 /* The input look, shared by every input, select and textarea. Red border and tint when invalid. */
 export function controlClasses(invalid: boolean) {
   return [
-    "min-h-12 w-full rounded-sm border px-4 py-3 text-16", // 16px stops iOS zooming into inputs
+    "min-h-14 w-full rounded-sm border px-4.5 py-3.5 text-16", // 16px stops iOS zooming into inputs
     "transition-[border-color,background-color] duration-280 ease-soft",
     "placeholder:text-muted placeholder:opacity-100", // 4.6:1 placeholder
     // a11y: the same 3px navy ring as every other control
@@ -33,7 +33,7 @@ export default function Field({ id, label, required, optional, error, full, hint
       <label className="font-head text-15 font-medium text-heading" htmlFor={id}>
         {label}{" "}
         {required && <span className="text-error" aria-hidden="true">*</span>}
-        {optional && <span className="text-14 font-normal text-muted">(optional)</span>}
+        {optional && <span className="text-14 font-normal text-ink">(optional)</span>}
       </label>
       {children}
       {hint}

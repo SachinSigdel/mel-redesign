@@ -13,7 +13,7 @@ export default function SectionHeading({ eyebrow, title, intro, id, tone = "blue
   return (
     <div className="mx-auto mb-12 max-w-180 text-center">
       <Eyebrow tone={tone}>{eyebrow}</Eyebrow>
-      <h2 id={id} className="mb-4 text-section">
+      <h2 id={id} className="mb-4 text-section" data-heading>
         {title}
       </h2>
       {intro && <p className="text-17">{intro}</p>}

@@ -16,7 +16,7 @@ export default function BlogSection() {
         {/* Phones: stacked. Tablet and up: a grid, with "View all posts" on the same row as the title */}
         <div data-reveal className="mb-10 flex flex-col items-start sm:grid sm:grid-cols-[1fr_auto] sm:gap-x-8">
           <Eyebrow className="sm:col-start-1 sm:row-start-1 sm:justify-self-start">Insights</Eyebrow>
-          <h2 id="blog-title" className="mb-4 text-section sm:col-start-1 sm:row-start-2 sm:mb-0">Recent posts</h2>
+          <h2 id="blog-title" className="mb-4 text-section sm:col-start-1 sm:row-start-2 sm:mb-0" data-heading>Recent posts</h2>
           <p className="max-w-160 text-17 sm:col-start-1 sm:row-start-3 sm:mt-4">
             Practical guides for candidates and employers in the UK job market
           </p>
