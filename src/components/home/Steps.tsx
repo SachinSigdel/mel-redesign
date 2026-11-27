@@ -23,7 +23,7 @@ export default function Steps() {
             >
               <div
                 // step-pulse: the ring that spreads out of the circle in turn (globals.css)
-                className="step-pulse relative z-1 mx-auto mb-4 grid size-18 place-items-center rounded-full bg-white text-blue-600 shadow-md transition-transform duration-240 ease-brand after:pointer-events-none after:absolute after:inset-0 after:rounded-full after:opacity-0 motion-safe:group-hover:-translate-y-1 max-sm:row-span-2 max-sm:m-0 max-sm:size-16"
+                className="step-pulse relative z-1 mx-auto mb-4 grid size-18 place-items-center rounded-full bg-white text-blue-600 shadow-md transition-transform duration-400 ease-brand after:pointer-events-none after:absolute after:inset-0 after:rounded-full after:opacity-0 motion-safe:group-hover:-translate-y-1 max-sm:row-span-2 max-sm:m-0 max-sm:size-16"
               >
                 <Icon className="size-6" aria-hidden="true" />
                 <span

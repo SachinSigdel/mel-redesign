@@ -15,19 +15,21 @@ export default function BlogCard({ post, wide = false }: BlogCardProps) {
   const card = [
     "group relative flex flex-col overflow-hidden rounded-md border border-hairline bg-white shadow-card",
     // hover (only on devices that can hover): thin blue outline and a deeper shadow
-    "transition-[border-color,box-shadow] duration-160 ease-brand hover:border-blue-600 hover:shadow-card-hover",
+    "transition-[border-color,box-shadow] duration-400 ease-soft hover:border-blue-600 hover:shadow-card-hover",
     // a11y: the title is clipped to 2 lines, which would clip its focus ring, so the ring goes around the card
     "has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-navy",
     wide && "sm:max-md:col-span-full sm:max-md:flex-row",
   ]
     .filter(Boolean)
     .join(" ");
-  const media = `aspect-video overflow-hidden bg-tint ${wide ? "sm:max-md:aspect-auto sm:max-md:shrink-0 sm:max-md:basis-1/2" : ""}`;
+  // no background colour here: each branch sets its own, because two bg-* classes on one element
+  // don't combine. Tailwind decides the winner by its own CSS order, not the order in the class string
+  const media = `aspect-video overflow-hidden ${wide ? "sm:max-md:aspect-auto sm:max-md:shrink-0 sm:max-md:basis-1/2" : ""}`;
 
   return (
-    <article className={card} data-card>
+    <article className={card} data-card data-reveal>
       {post.image ? (
-        <div className={media}>
+        <div className={`${media} bg-tint`}>
           <Image
             src={post.image}
             alt=""
@@ -57,7 +59,7 @@ export default function BlogCard({ post, wide = false }: BlogCardProps) {
           <a
             href={post.href}
             data-card-link
-            className="transition-colors duration-160 ease-brand group-hover:text-blue-600 after:absolute after:inset-0 focus-visible:outline-none"
+            className="transition-colors duration-280 ease-soft group-hover:text-blue-600 after:absolute after:inset-0 focus-visible:outline-none"
           >
             {post.title}
           </a>
@@ -65,7 +67,7 @@ export default function BlogCard({ post, wide = false }: BlogCardProps) {
         <p className="mb-4 line-clamp-3 text-15">{post.excerpt}</p>
         <span className="mt-auto inline-flex items-center gap-2 font-head text-15 font-medium text-navy" aria-hidden="true">
           Read more
-          <ArrowRight className="size-4 transition-transform duration-160 ease-brand motion-safe:group-hover:translate-x-0.75" />
+          <ArrowRight className="size-4 transition-transform duration-320 ease-brand motion-safe:group-hover:translate-x-0.75" />
         </span>
       </div>
     </article>

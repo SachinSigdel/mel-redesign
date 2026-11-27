@@ -8,13 +8,11 @@ type SectionHeadingProps = {
   tone?: "blue" | "deep";
 };
 
-/* A centred section heading: label with underline, title and an optional intro */
+/* A centred section heading: pill label, title and an optional intro */
 export default function SectionHeading({ eyebrow, title, intro, id, tone = "blue" }: SectionHeadingProps) {
   return (
     <div className="mx-auto mb-12 max-w-180 text-center">
-      <Eyebrow tone={tone} centred>
-        {eyebrow}
-      </Eyebrow>
+      <Eyebrow tone={tone}>{eyebrow}</Eyebrow>
       <h2 id={id} className="mb-4 text-section">
         {title}
       </h2>

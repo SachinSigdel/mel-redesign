@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-/* Fades and raises every [data-reveal] element 16px, once, the first time it scrolls into view.
+/* Fades and raises every [data-reveal] element 16px each time it scrolls into view, and resets it
+   once it has left the screen completely, so the animation plays again next time.
    Siblings are staggered 80ms (max 240ms). The motion itself is CSS (globals.css, "Scroll reveal");
    this only adds the classes. Runs again after each client-side navigation, for the new page. */
 export default function ScrollReveal() {
@@ -24,33 +25,31 @@ export default function ScrollReveal() {
     // content is only hidden once this class is on <html>, so without JS everything is visible
     document.documentElement.classList.add("js-reveal");
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-revealed");
-          io.unobserve(entry.target);
-        });
-      },
+    // show: once the element is 10% above the bottom of the screen
+    const show = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-revealed")),
       { rootMargin: "0px 0px -10% 0px" },
     );
+    // reset: only when the element is completely off screen, so it never vanishes while you can see it
+    const hide = new IntersectionObserver((entries) =>
+      entries.forEach((entry) => !entry.isIntersecting && entry.target.classList.remove("is-revealed")),
+    );
     els.forEach((el) => {
-      if (!el.classList.contains("is-revealed")) io.observe(el);
+      show.observe(el);
+      hide.observe(el);
     });
 
     // a11y: keyboard focus inside a hidden block shows it at once (CSS :focus-within shows it instantly;
     // this keeps it shown after focus moves on)
     const onFocusIn = (e: FocusEvent) => {
       const block = (e.target as Element).closest?.("[data-reveal]");
-      if (block && !block.classList.contains("is-revealed")) {
-        block.classList.add("is-revealed");
-        io.unobserve(block);
-      }
+      if (block) block.classList.add("is-revealed");
     };
     document.addEventListener("focusin", onFocusIn);
 
     return () => {
-      io.disconnect();
+      show.disconnect();
+      hide.disconnect();
       document.removeEventListener("focusin", onFocusIn);
     };
   }, [pathname]);

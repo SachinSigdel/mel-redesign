@@ -12,10 +12,10 @@ import { iconButton } from "./navStyles";
 
 // The blue underline grows from the centre on hover and stays on the current page
 const NAV_LINK = [
-  "relative py-2 font-head text-15 font-medium text-heading transition-colors duration-160 ease-brand",
+  "relative py-2 font-head text-15 font-medium text-heading transition-colors duration-280 ease-soft",
   "hover:text-navy aria-[current=page]:text-navy",
   "after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-blue",
-  "after:scale-x-0 after:transition-transform after:duration-160 after:ease-brand",
+  "after:scale-x-0 after:transition-transform after:duration-320 after:ease-brand",
   "hover:after:scale-x-100 aria-[current=page]:after:scale-x-100",
 ].join(" ");
 
@@ -73,7 +73,7 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:block">
-            <Button href={LINKS.apply} size="sm">Apply now</Button>
+            <Button href={LINKS.apply} size="sm" className="btn-sweep">Apply now</Button>
           </div>
 
           <button

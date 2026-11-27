@@ -5,9 +5,9 @@ import { CONTACT, LINKS } from "@/data/site";
 
 // a11y: below 900px (touch) each link has a 44px-tall tap area; on desktop they go back to 12px apart
 const LINK_LIST = "-my-2.5 md:my-0 md:space-y-3";
-const LINK = "inline-block min-w-11 py-2.5 hover:text-white md:py-0";
+const LINK = "inline-block min-w-11 py-2.5 transition-colors duration-280 ease-soft hover:text-white md:py-0";
 // phone, email and "All policies": the same 44px tap area, with a negative margin so the rows don't move
-const INLINE_LINK = "-my-2.5 inline-block py-2.5 hover:text-white";
+const INLINE_LINK = "-my-2.5 inline-block py-2.5 transition-colors duration-280 ease-soft hover:text-white";
 const ICON = "mt-1 size-4.5 shrink-0 text-white/60";
 
 export default function Footer() {

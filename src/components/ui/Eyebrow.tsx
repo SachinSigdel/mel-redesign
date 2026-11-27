@@ -1,25 +1,23 @@
 type EyebrowProps = {
   children: React.ReactNode;
   tone?: "blue" | "deep" | "white" | "soft-white";
-  rule?: boolean; // the short underline, sized to the label
-  centred?: boolean; // centre the underline under a centred heading
   className?: string;
 };
 
+// Pill label, the original site's style. The text is blue-800 (5.0:1 on the tint),
+// because the original's light blue was only 2.6:1.
 const TONES = {
-  blue: "text-blue-600", // 4.6:1 on white
-  deep: "text-blue-800", // for the pale blue services background, where blue-600 is only 4.3:1
-  white: "text-white",
-  "soft-white": "text-white/75",
+  blue: "border-tint-border bg-tint text-blue-800", // on white sections
+  deep: "border-tint-border bg-white text-blue-800", // on the pale blue services section, so the pill still stands out
+  white: "border-white/70 bg-transparent text-white", // on the blue CTA panel
+  "soft-white": "border-white/70 bg-transparent text-white", // on the navy contact header
 };
 
 /* The small label above a heading ("Welcome to MEL", "Insights"…) */
-export default function Eyebrow({ children, tone = "blue", rule = true, centred = false, className }: EyebrowProps) {
+export default function Eyebrow({ children, tone = "blue", className }: EyebrowProps) {
   const classes = [
-    "inline-block font-body text-15 font-medium",
+    "mb-4 inline-block rounded-full border px-4.5 py-1.5 font-body text-15 leading-normal",
     TONES[tone],
-    rule ? "eyebrow-rule mb-4" : "mb-3",
-    rule && centred && "is-centred",
     className,
   ]
     .filter(Boolean)

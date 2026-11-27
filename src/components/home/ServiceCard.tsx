@@ -5,14 +5,14 @@ import type { Service } from "@/data/services";
    The card's own transition is used by the scroll reveal (with a stagger delay), so the hover
    gets its own layer and reacts straight away. */
 const HOVER_LAYER =
-  "after:pointer-events-none after:absolute after:-inset-px after:rounded-[inherit] after:border after:border-blue-600 after:opacity-0 after:shadow-card-hover after:transition-opacity after:duration-160 after:ease-brand hover:after:opacity-100";
+  "after:pointer-events-none after:absolute after:-inset-px after:rounded-[inherit] after:border after:border-blue-600 after:opacity-0 after:shadow-card-hover after:transition-opacity after:duration-400 after:ease-soft hover:after:opacity-100";
 
 export default function ServiceCard({ service }: { service: Service }) {
   const Icon = service.icon;
   return (
     <article data-reveal className={`group relative flex flex-col rounded-md border border-hairline bg-white p-6 shadow-card ${HOVER_LAYER}`}>
       {/* the sector glyph: the same icon means the same sector everywhere (the signature detail) */}
-      <div className="mb-7 text-navy transition-colors duration-160 ease-brand group-hover:text-blue-600">
+      <div className="mb-7 text-navy transition-colors duration-280 ease-soft group-hover:text-blue-600">
         <Icon className="size-6" aria-hidden="true" />
       </div>
       <h3 className="mb-2 text-20">{service.title}</h3>

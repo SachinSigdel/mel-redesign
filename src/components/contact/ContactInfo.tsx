@@ -1,7 +1,7 @@
 import { Clock, Mail, MapPin, Phone, type LucideIcon } from "lucide-react";
 import { CONTACT } from "@/data/site";
 
-const CARD = "flex flex-col gap-1 rounded-md border border-hairline bg-white p-6 transition-colors duration-160 ease-brand";
+const CARD = "flex flex-col gap-1 rounded-md border border-hairline bg-white p-6 transition-colors duration-280 ease-soft";
 
 function CardContent({ icon: Icon, label, children }: { icon: LucideIcon; label: string; children: React.ReactNode }) {
   return (

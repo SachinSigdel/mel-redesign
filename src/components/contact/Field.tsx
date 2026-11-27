@@ -4,7 +4,7 @@ import { CircleAlert } from "lucide-react";
 export function controlClasses(invalid: boolean) {
   return [
     "min-h-12 w-full rounded-sm border px-4 py-3 text-16", // 16px stops iOS zooming into inputs
-    "transition-[border-color,background-color] duration-160 ease-brand",
+    "transition-[border-color,background-color] duration-280 ease-soft",
     "placeholder:text-muted placeholder:opacity-100", // 4.6:1 placeholder
     // a11y: the same 3px navy ring as every other control
     "focus:outline-3 focus:outline-offset-2 focus:outline-navy",

@@ -22,6 +22,7 @@
   --color-blue-700: #016aa3; /* CTA panel base */
   --color-blue-800: #0170a8; /* labels on the pale blue services background (5.0:1) */
   --color-tint: #ecf9ff;
+  --color-tint-border: #cbeefe; /* pill label border */
   --color-footer: #001133;
   --color-heading: #1c2452;
   --color-ink: #4a5372; /* body text */
@@ -77,6 +78,9 @@
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 4px 16px rgb(0 0 0 / 0.06);
   --shadow-card-hover: 0 4px 8px rgb(0 0 0 / 0.05), 0 20px 44px rgb(0 0 0 / 0.16);
   --shadow-header: 0 4px 24px rgb(0 17 51 / 0.08);
+  --shadow-btn: 0 6px 16px rgb(0 0 0 / 0.16); /* button hover lift */
+  --shadow-btn-dark: 0 8px 20px rgb(0 0 0 / 0.26); /* the same on blue and navy panels */
+  --shadow-btn-press: 0 1px 2px rgb(0 0 0 / 0.05);
 
   /* Motion: a fast-start curve for movement, an even curve for colour fades */
   --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
@@ -147,18 +151,6 @@
 
 /* ---------- Pieces that stay plain CSS ---------- */
 
-/* Label underline: a quarter of the label's width, between 24px and 64px */
-.eyebrow-rule::after {
-  content: "";
-  display: block;
-  width: clamp(24px, 25%, 64px);
-  height: 2px;
-  margin-top: 8px;
-  border-radius: 2px;
-  background: currentColor;
-}
-.eyebrow-rule.is-centred::after { margin-inline: auto; }
-
 /* CTA panel: a 50% blue layer over the swirl image keeps white text at 4.5:1 or more */
 .cta-bg {
   background:
@@ -178,8 +170,34 @@
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-stopped { overflow: clip; }
 
+/* Apply now in the header: the original site's "cropping" hover, in MEL's colours.
+   A diagonal band (tilted 25°) grows out from the centre until it covers the button, and the
+   text turns navy. The original swept a peach band over black; here it's the light brand blue
+   over navy (navy text on it is about 9:1). No lift, to stay true to the original.
+   Plain CSS outside Tailwind's layers, so it overrides the button's utility classes. */
+.btn-sweep { position: relative; overflow: hidden; isolation: isolate; }
+.btn-sweep::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1; /* above the button's own background, below its text */
+  width: 150%;
+  height: 0;
+  background: var(--color-tint-border);
+  opacity: 0.5;
+  transform: translate(-50%, -50%) rotate(25deg);
+  transition: height 750ms var(--ease-soft), opacity 750ms var(--ease-soft);
+}
+@media (hover: hover) {
+  .btn-sweep:hover { background-color: var(--color-navy); color: var(--color-navy); translate: none; box-shadow: none; }
+  .btn-sweep:hover::after { height: 400%; opacity: 1; }
+}
+.btn-sweep:focus-visible { color: var(--color-navy); } /* keyboard focus gets the same fill */
+.btn-sweep:focus-visible::after { height: 400%; opacity: 1; }
+
 /* ---------- Scroll reveal ----------
-   16px rise over 500ms, once per block, siblings 80ms apart (set by ScrollReveal.tsx).
+   16px rise over 500ms each time a block scrolls into view, siblings 80ms apart (set by ScrollReveal.tsx).
    Only active when JS has added .js-reveal to <html>, so without JS nothing is ever hidden. */
 .js-reveal [data-reveal] {
   opacity: 0;
@@ -188,6 +206,15 @@ html.lenis, html.lenis body { height: auto; }
   transition-delay: var(--reveal-delay, 0ms);
 }
 .js-reveal [data-reveal].is-revealed { opacity: 1; transform: none; }
+/* Blog cards fade up too, but they also have a hover (outline and shadow). Each property gets its
+   own timing: the fade keeps its stagger delay, while the hover reacts straight away */
+.js-reveal [data-card][data-reveal] {
+  transition:
+    opacity 500ms var(--ease-brand) var(--reveal-delay, 0ms),
+    transform 500ms var(--ease-brand) var(--reveal-delay, 0ms),
+    border-color 400ms var(--ease-soft),
+    box-shadow 400ms var(--ease-soft);
+}
 /* a11y: keyboard focus inside a block that hasn't been revealed yet shows it at once */
 .js-reveal [data-reveal]:focus-within { opacity: 1; transform: none; transition-duration: 0ms; transition-delay: 0ms; }
 @media print { .js-reveal [data-reveal] { opacity: 1 !important; transform: none !important; } }

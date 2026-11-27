@@ -14,7 +14,7 @@ export default function ContactPage() {
     <>
       <section className="on-dark bg-navy py-14 text-white md:py-20">
         <div className="wrap animate-rise">
-          <Eyebrow tone="soft-white" rule={false}>Get in touch</Eyebrow>
+          <Eyebrow tone="soft-white">Get in touch</Eyebrow>
           <h1 className="mb-3 text-page text-white">Contact us</h1>
           <p className="max-w-xl text-18 text-white/85">
             Whether you&apos;re looking for your next role or need reliable staff, our team is here to help

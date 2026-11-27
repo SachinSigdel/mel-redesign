@@ -6,9 +6,10 @@ type Variant = "primary" | "secondary" | "white";
 type Size = "md" | "sm";
 
 const VARIANTS: Record<Variant, string> = {
-  primary: "border-transparent bg-navy text-white hover:bg-navy-700",
-  secondary: "border-navy bg-transparent text-navy hover:bg-navy hover:text-white",
-  white: "border-transparent bg-white text-blue-600 hover:bg-tint",
+  // each variant sets its own hover shadow: two shadow classes on one element would clash
+  primary: "border-transparent bg-navy text-white hover:bg-navy-700 hover:not-aria-disabled:shadow-btn", // a slightly darker navy
+  secondary: "border-navy bg-transparent text-navy hover:bg-navy hover:text-white hover:shadow-btn", // fills navy, on top of the lift
+  white: "border-transparent bg-white text-blue-600 hover:bg-tint hover:shadow-btn-dark", // on blue and navy panels the shadow needs more depth
 };
 
 const SIZES: Record<Size, string> = {
@@ -22,8 +23,14 @@ export function buttonClasses(variant: Variant = "primary", size: Size = "md") {
   return [
     "group inline-flex items-center justify-center gap-2 rounded-sm border-2",
     "font-head text-15 leading-none font-medium",
-    // colour changes fade over 280ms on an even curve; the press is instant
-    "transition-colors duration-280 ease-soft active:scale-[0.98]",
+    // hover: lift 2px onto a soft neutral shadow, and each variant shifts its colour (set in VARIANTS).
+    // Tailwind's hover: only applies on devices that can hover, so a tap on a phone doesn't leave it stuck
+    "transition-[color,background-color,border-color,box-shadow,translate,scale] duration-280 ease-soft",
+    "hover:not-aria-disabled:-translate-y-0.5",
+    // press: back down, slightly smaller, shadow tucked in, and quick so clicks never feel laggy
+    "active:translate-y-0 active:scale-[0.98] active:shadow-btn-press active:duration-120",
+    "motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100",
+    // while the form is sending (aria-disabled): no lift, no shadow
     "aria-disabled:cursor-progress aria-disabled:opacity-70",
     VARIANTS[variant],
     SIZES[size],
@@ -47,7 +54,7 @@ export default function Button({ href, variant = "primary", size = "md", arrow =
       {arrow && (
         <ArrowRight
           aria-hidden="true"
-          // the arrow slides 3px on hover: "this takes you somewhere"
+          // the arrow slides 3px on hover: "this takes you somewhere" (it glides slightly behind the lift)
           className="size-4.5 shrink-0 transition-transform duration-320 ease-brand motion-safe:group-hover:translate-x-0.75"
         />
       )}
