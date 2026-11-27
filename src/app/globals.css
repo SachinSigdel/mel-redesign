@@ -1,0 +1,246 @@
+@import "tailwindcss";
+
+/* =========================================================
+   MEL design system for Tailwind.
+   1. @theme: MEL's tokens. Tailwind turns each one into utility classes
+      (--color-navy → bg-navy, text-navy, border-navy…).
+   2. Base styles: what every page starts from.
+   3. A few CSS-only pieces that are clearer as plain CSS than as utilities:
+      focus rings on dark sections, the CTA background, the select arrow,
+      scroll reveals, the step paths, smooth scrolling and reduced motion.
+   ========================================================= */
+
+@theme {
+  /* Only MEL's palette exists: Tailwind's default colours are removed,
+     so an off-brand colour can't slip in by accident */
+  --color-*: initial;
+  --color-white: #fff;
+  --color-navy: #2a367a;
+  --color-navy-700: #1f2960;
+  --color-blue: #0193de;
+  --color-blue-600: #017cba; /* darker brand blue: 4.6:1 on white, passes WCAG AA */
+  --color-blue-700: #016aa3; /* CTA panel base */
+  --color-blue-800: #0170a8; /* labels on the pale blue services background (5.0:1) */
+  --color-tint: #ecf9ff;
+  --color-footer: #001133;
+  --color-heading: #1c2452;
+  --color-ink: #4a5372; /* body text */
+  --color-muted: #6b7390;
+  --color-line: #e3e8f2;
+  --color-hairline: rgb(28 36 82 / 0.1);
+  --color-hairline-strong: rgb(28 36 82 / 0.22);
+  --color-raised: #f3f5f9;
+  --color-raised-hover: #e6e9f1;
+  --color-field: #fbfcfe;
+  --color-field-border: rgb(28 36 82 / 0.55); /* 3.4:1, so the field edge is visible */
+  --color-field-border-hover: rgb(28 36 82 / 0.75);
+  --color-error: #b42318; /* 5.8:1 on the error banner */
+  --color-error-soft: #fdecea;
+  --color-error-field: #fff8f7;
+  --color-success: #087249; /* 5.4:1 on the success banner */
+  --color-success-soft: #e8f7f0;
+
+  /* Breakpoints, in px like the static version: tablet, small desktop, desktop */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 900px;
+  --breakpoint-lg: 1200px;
+
+  /* Type sizes named by their pixel size. No line-height is attached,
+     so text keeps the body's 1.65 unless a component sets its own */
+  --text-*: initial;
+  --text-12: 12px;
+  --text-13: 13px;
+  --text-14: 14px;
+  --text-15: 15px;
+  --text-16: 16px;
+  --text-17: 17px;
+  --text-18: 18px;
+  --text-20: 20px;
+  --text-24: 24px;
+  /* Fluid headings: grow with the screen between a minimum and a maximum */
+  --text-hero: clamp(36px, 5.4vw, 56px);
+  --text-page: clamp(34px, 5vw, 52px);
+  --text-cta: clamp(30px, 4.4vw, 46px);
+  --text-section: clamp(28px, 4vw, 42px);
+  --text-about: clamp(28px, 3.6vw, 40px);
+  --text-contact: clamp(26px, 3vw, 34px);
+
+  /* Shape and depth */
+  --radius-sm: 8px;
+  --radius-tile: 10px;
+  --radius-md: 16px;
+  --radius-panel: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 40px;
+  --shadow-md: 0 8px 24px rgb(0 0 0 / 0.06);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 4px 16px rgb(0 0 0 / 0.06);
+  --shadow-card-hover: 0 4px 8px rgb(0 0 0 / 0.05), 0 20px 44px rgb(0 0 0 / 0.16);
+  --shadow-header: 0 4px 24px rgb(0 17 51 / 0.08);
+
+  /* Motion: a fast-start curve for movement, an even curve for colour fades */
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-rise: rise 400ms var(--ease-brand) both;
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+/* The fonts come from next/font (layout.tsx), which puts them in CSS variables.
+   "inline" makes Tailwind use the variable itself, so font-head → var(--font-poppins) */
+@theme inline {
+  --font-head: var(--font-poppins), system-ui, sans-serif;
+  --font-body: var(--font-heebo), system-ui, sans-serif;
+}
+
+/* Page width and spacing that change at the 900px breakpoint */
+:root {
+  --gutter: 20px;
+  --header-h: 72px;
+}
+@media (min-width: 900px) {
+  :root { --gutter: 32px; --header-h: 84px; }
+}
+
+/* The page container: 1200px of content plus the side gutters */
+@utility wrap {
+  width: 100%;
+  max-width: calc(1200px + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@layer base {
+  html {
+    /* a11y: anything scrolled into view by focus lands below the sticky header, not under it */
+    scroll-padding-top: calc(var(--header-h) + 16px);
+  }
+  body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-ink);
+    background: var(--color-white);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-head);
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--color-heading);
+  }
+  button { cursor: pointer; }
+  /* Lucide icons draw with a 2px stroke by default; the design uses 1.5 everywhere */
+  .lucide { stroke-width: 1.5; }
+
+  /* Focus ring: navy on light backgrounds (11:1 on white)… */
+  :focus-visible {
+    outline: 3px solid var(--color-navy);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* …and white inside anything marked .on-dark, where navy would disappear */
+  .on-dark :focus-visible { outline-color: var(--color-white); }
+}
+
+/* ---------- Pieces that stay plain CSS ---------- */
+
+/* Label underline: a quarter of the label's width, between 24px and 64px */
+.eyebrow-rule::after {
+  content: "";
+  display: block;
+  width: clamp(24px, 25%, 64px);
+  height: 2px;
+  margin-top: 8px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.eyebrow-rule.is-centred::after { margin-inline: auto; }
+
+/* CTA panel: a 50% blue layer over the swirl image keeps white text at 4.5:1 or more */
+.cta-bg {
+  background:
+    linear-gradient(rgb(1 106 163 / 0.5), rgb(1 106 163 / 0.5)),
+    url("/images/cta-bg.webp") left center / cover no-repeat,
+    var(--color-blue-700);
+}
+
+/* Select arrow (the browser's own arrow is removed with appearance-none) */
+.select-arrow {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%234a5372' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+/* Smooth wheel scrolling (Lenis): only active once JS adds .lenis to <html> */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-stopped { overflow: clip; }
+
+/* ---------- Scroll reveal ----------
+   16px rise over 500ms, once per block, siblings 80ms apart (set by ScrollReveal.tsx).
+   Only active when JS has added .js-reveal to <html>, so without JS nothing is ever hidden. */
+.js-reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms var(--ease-brand), transform 500ms var(--ease-brand);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js-reveal [data-reveal].is-revealed { opacity: 1; transform: none; }
+/* a11y: keyboard focus inside a block that hasn't been revealed yet shows it at once */
+.js-reveal [data-reveal]:focus-within { opacity: 1; transform: none; transition-duration: 0ms; transition-delay: 0ms; }
+@media print { .js-reveal [data-reveal] { opacity: 1 !important; transform: none !important; } }
+
+/* ---------- Steps: wavy dotted paths with dots flowing from step to step ----------
+   Layout and look are utilities in Steps.tsx; the timing lives here because it
+   depends on the reveal classes and on each step's position.
+   Sequence: circle 1 pulses, path 1 draws in, circle 2 pulses, path 2 draws in,
+   circle 3 pulses. The dots flow for 4.5s, then stop (WCAG 2.2.2), and flow again
+   while the strip is hovered. */
+.step-path {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.85);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 0 10; /* zero-length dashes + round caps = a dot every 10 units */
+  vector-effect: non-scaling-stroke; /* the SVG stretches, the dots stay round */
+}
+.js-reveal .step-connector { clip-path: inset(-4px 100% -4px 0); }
+.js-reveal .is-revealed .step-connector {
+  animation: step-draw 700ms var(--ease-soft) calc(400ms + var(--i) * 800ms) both;
+}
+.js-reveal .is-revealed .step-path {
+  animation: step-flow 300ms linear calc(400ms + var(--i) * 800ms) 15; /* 15 × 300ms = 4.5s */
+}
+@media (hover: hover) {
+  /* only the repeat count changes, so the dots carry on instead of restarting */
+  .js-reveal .steps-list:hover .is-revealed .step-path { animation-iteration-count: infinite; }
+}
+.js-reveal .is-revealed .step-pulse::after {
+  animation: step-pulse 900ms var(--ease-soft) var(--pulse-delay, 300ms) both;
+}
+.js-reveal .step:nth-child(2) { --pulse-delay: 1100ms; }
+.js-reveal .step:nth-child(3) { --pulse-delay: 1900ms; }
+@media (max-width: 639px) {
+  .js-reveal .step { --pulse-delay: 300ms; } /* phones: no paths, so the circles pulse together */
+}
+@keyframes step-draw {
+  from { clip-path: inset(-4px 100% -4px 0); }
+  to { clip-path: inset(-4px 0 -4px 0); }
+}
+@keyframes step-flow { to { stroke-dashoffset: -10; } }
+@keyframes step-pulse {
+  0% { opacity: 1; box-shadow: 0 0 0 0 rgb(255 255 255 / 0.6); }
+  100% { opacity: 1; box-shadow: 0 0 0 16px rgb(255 255 255 / 0); }
+}
+
+/* ---------- Reduced motion: no movement for people who asked for less ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .step-connector, .step-path, .step-pulse::after { animation: none !important; }
+}
