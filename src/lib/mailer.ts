@@ -51,7 +51,9 @@ export async function sendEnquiry(data: ContactInput) {
   await transporter.sendMail({
     from: `"MEL website" <${process.env.GMAIL_USER}>`,
     to: process.env.CONTACT_TO_EMAIL || process.env.GMAIL_USER,
-    replyTo: `"${name}" <${data.email}>`, // pressing Reply answers the person who wrote in
+    // pressing Reply answers the person who wrote in. Name and address are passed separately, so
+    // Nodemailer does the quoting and a quote mark in a name can't add a second address.
+    replyTo: { name, address: data.email },
     subject: oneLine(`New enquiry from ${name} (${type})`),
     text: `${rows.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\nMessage:\n${data.message}`,
     html: `

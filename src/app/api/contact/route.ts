@@ -1,8 +1,36 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/contactSchema";
 import { sendEnquiry, shouldSend } from "@/lib/mailer";
+import { clientIp, isRateLimited } from "@/lib/rateLimit";
+
+// Browsers send an Origin header with every POST. Only accept posts made from this site's own pages,
+// so another website can't make its visitors submit the form. (curl and other tools send no Origin.)
+function isSameOrigin(request: Request) {
+  const origin = request.headers.get("origin");
+  if (!origin) return true;
+  try {
+    return new URL(origin).host === request.headers.get("host");
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(request: Request) {
+  // JSON only: a cross-site form can't send JSON without the browser asking permission first (CORS), and it's refused
+  if (!request.headers.get("content-type")?.includes("application/json")) {
+    return NextResponse.json({ ok: false, error: "Expected JSON" }, { status: 415 });
+  }
+  if (!isSameOrigin(request)) {
+    return NextResponse.json({ ok: false, error: "Forbidden" }, { status: 403 });
+  }
+  // At most 5 enquiries per 10 minutes from one address, so nobody can flood the inbox
+  if (isRateLimited(clientIp(request))) {
+    return NextResponse.json(
+      { ok: false, error: "Too many messages, please try again later" },
+      { status: 429, headers: { "Retry-After": "600" } },
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();

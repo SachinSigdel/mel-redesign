@@ -12,7 +12,7 @@ type Status =
   | { type: "idle" }
   | { type: "invalid" }
   | { type: "success"; name: string }
-  | { type: "error" };
+  | { type: "error"; limited?: boolean }; // limited: too many messages in a short time (429)
 
 // Visible message styles. While empty, the box is sr-only: hidden on screen but still a live region
 // screen readers know about, so they announce the message as soon as it's filled in.
@@ -72,6 +72,7 @@ export default function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+      if (res.status === 429) return announce({ type: "error", limited: true });
       if (!res.ok) throw new Error(`Request failed: ${res.status}`);
       reset(EMPTY);
       announce({ type: "success", name: data.firstName });
@@ -183,7 +184,15 @@ export default function ContactForm() {
           <>
             <CircleAlert className="mt-0.5 size-4.5 shrink-0" aria-hidden="true" />
             <div>
-              <strong className="block">Sorry, something went wrong</strong> Please try again or email info@mymel.co.uk.
+              {status.limited ? (
+                <>
+                  <strong className="block">Too many messages</strong> Please wait a few minutes, or email info@mymel.co.uk.
+                </>
+              ) : (
+                <>
+                  <strong className="block">Sorry, something went wrong</strong> Please try again or email info@mymel.co.uk.
+                </>
+              )}
             </div>
           </>
         )}
